@@ -1,60 +1,41 @@
+require_relative 'bank_account'
+
 class Transfer
-  # your code here
-<<<<<<< HEAD
-  attr_accessor :status
-  attr_reader :sender, :receiver, :amount
-=======
-  attr_accessor :sender, :receiver, :status, :amount
->>>>>>> ada2f28b9ab78e60741c0922b82c64e791f295a0
+  attr_accessor :sender, :receiver, :amount, :status
   
-  def initialize(sender, receiver, amount)
+  def initialize(sender, receiver, amount = 50)
     @sender = sender
     @receiver = receiver
+    @amount = amount 
     @status = "pending"
-    @amount = amount
-  end  
+  end
   
   def valid?
-<<<<<<< HEAD
-    @sender.valid? && @receiver.valid?
+    if sender.valid? && receiver.valid?
+      true 
+    else
+      false 
+    end
   end
   
   def execute_transaction
-    if valid? && @sender.balance > amount && @status == "pending"
-      @sender.deposit(amount * -1)
-      @receiver.deposit(amount)
+    if @sender.balance < @amount || !valid?
+      @status = "rejected"
+      return "Transaction rejected. Please check your account balance."
+    elsif @status == "complete"
+      puts "This transaction has already been processed."
+    else 
+      @sender.deposit(@amount * -1)
+      @receiver.deposit(@amount)
       @status = "complete"
-    else
-      @status = "rejected"
-      "Transaction rejected. Please check your account balance."
-=======
-    sender.valid? && receiver.valid?
-  end
-  
-  def execute_transaction()
-    if valid? && status == "pending"
-        sender.deposit(amount * -1)
-        receiver.deposit(amount)
-        @status = "complete"
-    else
-      puts "Transaction rejected. Please check your account balance."
-      @status = "rejected"
->>>>>>> ada2f28b9ab78e60741c0922b82c64e791f295a0
     end
   end
   
-  def reverse_transfer()
-<<<<<<< HEAD
+  def reverse_transfer 
     if @status == "complete"
-      @sender.deposit(amount)
-      @receiver.deposit(amount * -1)
-=======
-    if status == "complete"
-      sender.deposit(amount)
-      receiver.deposit(amount * -1)
->>>>>>> ada2f28b9ab78e60741c0922b82c64e791f295a0
+      @sender.deposit(@amount)
+      @receiver.deposit(@amount * -1)
       @status = "reversed"
     end
   end
-  
 end
